@@ -1,12 +1,13 @@
-
 const Discord = require("discord.js");
 const fs = require("fs");
 const { randomInt } = require("crypto");
 const {
     prefix,
     token,
-    yourID,
-    pluralkit
+    me,
+    pluralkit,
+    kevin,
+    profanitylist
 } = require('./config.json');
 
 require("discord-reply");
@@ -44,7 +45,7 @@ client.on("message", message => {
     const lowerMessage = message.content.toLowerCase();
     var currentDate = new Date();
 
-    if (message.author.bot && message.author.id != pluralkit) { return; }
+    if (message.author.bot && message.author.id != pluralkit || message.author.id == kevin) { return; }
     else if (lowerMessage.indexOf("pinging") != -1) {
         console.log("Pong-ed @" + message.author.tag + " at " + currentDate.toLocaleTimeString("en-gb"));
         message.lineReply("ponging");
@@ -64,24 +65,44 @@ client.on("message", message => {
         if (lowerMessage.indexOf("i'm ") != -1) {
             console.log("Told a dad joke to @" + message.author.tag + " at " + currentDate.toLocaleTimeString("en-gb"));
             const dadJoke = message.content.slice(lowerMessage.indexOf("i'm") + 4);
-            message.channel.send("Hi " + dadJoke + ", I'm Abott!");
+            if (dadJoke == "abott") {
+                SpidermanMeme(message);
+            }
+            else{
+                message.lineReply("Hi " + dadJoke + ", I'm Abott!");
+            }
         }
         else if (lowerMessage.indexOf("i’m ") != -1) {
             console.log("Told a dad joke to @" + message.author.tag + " at " + currentDate.toLocaleTimeString("en-gb"));
             const dadJoke = message.content.slice(lowerMessage.indexOf("i’m") + 4);
-            message.channel.send("Hi " + dadJoke + ", I'm Abott!");
+            if (dadJoke == "abott") {
+                SpidermanMeme(message);
+            }
+            else{
+                message.lineReply("Hi " + dadJoke + ", I'm Abott!");
+            }
         }
         else if (lowerMessage.indexOf(" im ") != -1 || lowerMessage.startsWith("im")) {
             console.log("Told a dad joke to @" + message.author.tag + " at " + currentDate.toLocaleTimeString("en-gb"));
             const dadJoke = message.content.slice(lowerMessage.indexOf("im") + 3);
-            message.channel.send("Hi " + dadJoke + ", I'm Abott!");
+            if (dadJoke == "abott") {
+                SpidermanMeme(message);
+            }
+            else{
+                message.lineReply("Hi " + dadJoke + ", I'm Abott!");
+            }
         }
         else if (lowerMessage.indexOf("i am ") != -1) {
             console.log("Told a dad joke to @" + message.author.tag + " at " + currentDate.toLocaleTimeString("en-gb"));
             const dadJoke = message.content.slice(lowerMessage.indexOf("i am") + 5);
-            message.channel.send("Hi " + dadJoke + ", I'm Abott!");
+            if (dadJoke == "abott") {
+                SpidermanMeme(message);
+            }
+            else {
+                message.lineReply("Hi " + dadJoke + ", I'm Abott!");
+            }
         }
-        
+
         for (i = 0; i < profanitylist.length; i++){
             if (lowerMessage.indexOf(profanitylist[i]) != -1) {
                 console.log("@" + message.author.tag + " said a profanity at " + currentDate.toLocaleTimeString("en-gb"));
@@ -90,7 +111,7 @@ client.on("message", message => {
             }
         }
     }
-    
+
     else if (lowerMessage.indexOf("me when") != -1) {
         console.log("@" + message.author.tag + " said \"me when\"..." + " at " + currentDate.toLocaleTimeString("en-gb"));
         message.guild.members.cache.get(client.user.id).setNickname(message.author.username + " is stinky");
@@ -144,7 +165,6 @@ client.on("message", message => {
             }
 
             for (i = sortedlist.length - 1; i >= 0; i--) {
-                let userID = sortedlist[i].substring(0, sortedlist[i].length - 4);
                 try{
                     var splitcontents = String(fs.readFileSync(".\\user_info\\" + sortedlist[i])).split(/\n/);
                     var pingcount = splitcontents[0];
@@ -152,9 +172,7 @@ client.on("message", message => {
                     
                     fs.appendFileSync("leaderboard.txt", (sortedlist.length - i) + ": @" + usertag + " | " + pingcount + "\n");
                 }
-                catch (e){
-                    console.error(e);
-                }
+                catch (err){ console.error(err); }
             }
 
             const leaderboardMessage = new Discord.MessageEmbed()
@@ -193,7 +211,7 @@ client.on("message", message => {
         
         case "maths":
             const question = justArgs;
-            if (isNumber(question.charAt(1))) {
+            if (isNumber(question.charAt(0))) {
                 try {
                     var answer = eval(question);
                     message.channel.send(String(answer));
@@ -246,7 +264,7 @@ client.on("message", message => {
             console.log("@" + message.author.username + "#" + message.author.discriminator + " typed an invalid command")
             break;
     }
-});
+})
 
 // Returns true if number, returns false otherwise
 function isNumber(str) {
@@ -256,6 +274,10 @@ function isNumber(str) {
     else {
         return false;
     }
+}
+
+function SpidermanMeme(message) {
+    message.lineReply("No, that's me silly!");
 }
 
 // Saves the number of times a user has said "ping" in a file formatted as: [insert ID].txt
