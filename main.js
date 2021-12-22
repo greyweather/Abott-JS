@@ -3,11 +3,9 @@ const fs = require("fs");
 const { randomInt } = require("crypto");
 const {
     prefix,
-    token,
-    me,
     pluralkit,
-    kevin,
-    profanitylist
+    profanitylist,
+    yourID
 } = require('./config.json');
 
 require("discord-reply");
@@ -127,7 +125,7 @@ client.on("message", message => {
     // Switch statement for commands
     switch (command) {
         case "playing":
-            if (message.author.id == me) {
+            if (message.author.id == yourID) {
                 const status = justArgs;
                 client.user.setActivity(status);
             }
@@ -227,7 +225,7 @@ client.on("message", message => {
             }
         
         case "dadmode":
-            if (message.author.id == me) {
+            if (message.author.id == yourID) {
                 switch (justArgs) {
                     case "true":
                         dadMode = true;
