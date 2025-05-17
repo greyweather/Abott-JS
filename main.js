@@ -29,7 +29,7 @@ client.once("ready", () => {
             console.log("dadMode automatically set to true");
             break;
         default:
-            console.log("The contents of the dadmode.txt file were invalid");
+            console.log("The contents of the file 'dadmode.txt' were invalid");
             break;
     }
 });
